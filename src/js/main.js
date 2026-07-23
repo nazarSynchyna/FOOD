@@ -1,5 +1,7 @@
 "use strict";
 
+const { default: axios } = require("axios");
+
 // Tabs
 window.addEventListener("DOMContentLoaded", () => {
   const tabs = document.querySelectorAll(".tabheader__item"),
@@ -189,21 +191,17 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  const getResourse = async (url) => {
-    const res = await fetch(url);
-
-    if (!res.ok) {
-      throw new Error(`Could not fetch ${url}, status: ${res.status}`);
-    }
-
-    return await res.json();
-  };
-
-  getResourse("http://localhost:3000/menu")
-  .then(data => {
-    data.forEach(({img, altimg, title, descr, price}) => {
-      new MenuCard(img, altimg, title, descr, price, '.menu .container').render();
-    }); 
+  axios.get("http://localhost:3000/menu").then((data) => {
+    data.data.forEach(({ img, altimg, title, descr, price }) => {
+      new MenuCard(
+        img,
+        altimg,
+        title,
+        descr,
+        price,
+        ".menu .container",
+      ).render();
+    });
   });
 
   // Forms
